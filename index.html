@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nikoh To'yi Taklifnomasi | Sardor & Mohinur</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💍</text></svg>">
+  
+  <!-- OpenGraph ma'lumotlari (Telegram, WhatsApp, Facebook uchun) -->
+  <meta property="og:title" content="Nikoh To'yi Taklifnomasi | Sardor & Mohinur">
+  <meta property="og:description" content="Sizni hayotimizning eng quvonchli kunida — baxt to'yimiz tantanasiga lutfan taklif etamiz!">
+  <meta property="og:image" content="assets/images/luxury-wedding-hero.jpg">
+  <meta property="og:type" content="website">
+
+  <!-- Google Shriftlar -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Leaflet Xarita kutubxonasi (Bepul va tezkor) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Maxsus uslublar -->
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Atirgul yaproqlari va oltin zarralar kanvasi -->
+  <canvas id="petals-canvas"></canvas>
+
+  <!-- SUZUVCHI BOSHQARUV TUGMALARI -->
+  <div class="floating-controls">
+    <!-- Musiqa yoqish / o'chirish -->
+    <button id="music-toggle-btn" class="floating-btn music-btn" title="Musiqani qo'yish" aria-label="Musiqa">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V5l12-2v13"></path>
+        <circle cx="6" cy="18" r="3"></circle>
+        <circle cx="18" cy="16" r="3"></circle>
+      </svg>
+      <div class="music-waves">
+        <span></span><span></span><span></span>
+      </div>
+    </button>
+  </div>
+
+  <!-- ==========================================================================
+       1. OCHILISH EKRANI (ENVELOPE SCREEN - LUXURY ROYAL STYLE)
+       ========================================================================== -->
+  <div id="envelope-overlay">
+    <!-- Orqa fondagi romantik oltin zarrachalar va yorug'lik auralari -->
+    <div class="overlay-ambient-glow"></div>
+    <div class="overlay-sparkles">
+      <span class="sparkle-dot sp-1">✦</span>
+      <span class="sparkle-dot sp-2">✦</span>
+      <span class="sparkle-dot sp-3">✧</span>
+      <span class="sparkle-dot sp-4">✦</span>
+      <span class="sparkle-dot sp-5">✧</span>
+    </div>
+
+    <div class="envelope-wrapper">
+      
+      <!-- Konvert ustidagi nafis qirollik sarlavhasi -->
+      <div class="envelope-top-header">
+        <div class="envelope-royal-emblem">
+          <span class="emblem-line"></span>
+          <span class="emblem-crown">⚜️</span>
+          <span class="emblem-line"></span>
+        </div>
+        <div class="envelope-intro-badge">Nikoh To'yi Taklifnomasi</div>
+        <h1 class="envelope-intro-names dyn-couple-title">Sardor & Mohinur</h1>
+        <div class="envelope-intro-date">
+          <span class="intro-date-pill dyn-date-display">25-Noyabr, 2026-yil</span>
+        </div>
+      </div>
+
+      <!-- 3D Luxury Realistik Konvert -->
+      <div class="envelope-box" id="envelope-box" role="button" aria-label="Taklifnomani ochish">
+        
+        <!-- Ichki astar guldor naqsh (Lining) -->
+        <div class="envelope-lining"></div>
+
+        <!-- Konvert cho'ntak qatlamlari (Chap, O'ng, Pastki qismlar) -->
+        <div class="envelope-pocket-bottom"></div>
+        <div class="envelope-pocket-left"></div>
+        <div class="envelope-pocket-right"></div>
+
+        <!-- Oltin ipak tasma / Lenta -->
+        <div class="envelope-ribbon">
+          <div class="ribbon-shine"></div>
+        </div>
+
+        <!-- Konvert yuqori qopqog'i (Flap) -->
+        <div class="envelope-flap">
+          <div class="flap-gold-trim"></div>
+        </div>
+        
+        <!-- Mumli oltin muhr (Wax Seal) - Markazda diagonal S & M -->
+        <div class="wax-seal" id="wax-seal-btn" title="Ochish uchun bosing">
+          <div class="seal-glow-ring"></div>
+          <div class="wax-seal-inner">
+            <div class="seal-diagonal-monogram">
+              <span class="seal-letter-s dyn-groom-initial">S</span>
+              <span class="seal-ampersand">&</span>
+              <span class="seal-letter-m dyn-bride-initial">M</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Konvert ostidagi ochish tugmasi va eslatma -->
+      <div class="envelope-actions">
+        <div class="envelope-click-hint">
+          <span class="hint-hand-icon">💍</span>
+          <span>Muhrni bosing yoki taklifnomani oching</span>
+        </div>
+
+        <button id="envelope-open-btn" class="btn-open-envelope">
+          <span class="btn-shine-effect"></span>
+          <span class="btn-icon">💌</span>
+          <span class="btn-text">Taklifnomani Ochish</span>
+          <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <div class="envelope-music-hint">
+          <span class="music-note-icon">🎵</span>
+          <span>Mayin musiqa sadosi hamrohligida</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       ASOSIY TAKLIFNOMA MAZMUNI
+       ========================================================================== -->
+  <main class="main-content">
+    
+    <!-- 2. HERO BO'LIMI -->
+    <section class="section-card hero-section">
+      <div class="corner-ornament corner-top-left"></div>
+      <div class="corner-ornament corner-top-right"></div>
+      <div class="corner-ornament corner-bottom-left"></div>
+      <div class="corner-ornament corner-bottom-right"></div>
+
+      <!-- Bismillah -->
+      <div class="hero-bismillah dyn-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+      
+      <!-- Monogramma doirasi -->
+      <div class="hero-monogram-circle">
+        <span class="hero-monogram-text dyn-monogram">S & M</span>
+      </div>
+
+      <div class="hero-invitation-badge">Nikoh To'yimizga Taklif Etamiz</div>
+      
+      <!-- Kelin va Kuyov Ismlari -->
+      <h1 class="hero-names">
+        <span class="dyn-groom-name gold-text">Sardor</span>
+        <span class="hero-ampersand">&</span>
+        <span class="dyn-bride-name gold-text">Mohinur</span>
+      </h1>
+
+      <!-- Sana nishoni -->
+      <div class="hero-date-badge">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span class="dyn-date-full">25-Noyabr, 2026-yil, Chorshanba oqshomi</span>
+      </div>
+
+      <!-- Ortga hisoblash taymeri -->
+      <div class="countdown-container">
+        <div class="countdown-title" id="countdown-status-title">To'ygacha qolgan vaqt:</div>
+        <div class="countdown-grid">
+          <div class="countdown-item">
+            <div class="countdown-number" id="cd-days">00</div>
+            <div class="countdown-label">Kun</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number" id="cd-hours">00</div>
+            <div class="countdown-label">Soat</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number" id="cd-minutes">00</div>
+            <div class="countdown-label">Daqiqa</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number" id="cd-seconds">00</div>
+            <div class="countdown-label">Soniya</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NIKOH UZUKLARI RASMI -->
+    <div style="border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 32px; box-shadow: var(--shadow-luxury); border: 1px solid var(--border-gold);">
+      <img src="assets/images/wedding-rings.jpg" alt="Nikoh uzuklari" style="width: 100%; height: 220px; object-fit: cover; display: block;" onerror="this.style.display='none'">
+    </div>
+
+    <!-- 3. SHIOR VA OYAT -->
+    <section class="section-card quote-card">
+      <div class="quote-icon-large">❝</div>
+      <p class="quote-text dyn-quote-text">
+        «Va Uning alomatlaridan biri — sizlar sokinlik topishingiz uchun sizlarga o'z turingizdan juftlar yaratishi va orangizda muhabbat hamda mehr-shafqat paydo qilganidir.»
+      </p>
+      <div class="quote-source dyn-quote-source">Rum surasi, 21-oyat</div>
+    </section>
+
+    <!-- 4. TAKLIFNOMA MATNI -->
+    <section class="section-card">
+      <div class="corner-ornament corner-top-left"></div>
+      <div class="corner-ornament corner-top-right"></div>
+      
+      <div class="section-subtitle">Samimiy istaklar ila</div>
+      <h2 class="section-title dyn-invitation-greeting">Hurmatli va aziz mehmonimiz!</h2>
+      
+      <div class="divider-gold">
+        <span class="divider-icon">❦</span>
+      </div>
+
+      <p class="invitation-body-text dyn-invitation-text">
+        Sizni hayotimizning eng quvonchli, unutilmas va shukuhli kunida — farzandlarimizning baxt to'yi munosabati bilan yoziladigan qutlug' dasturxonimizga lutfan taklif etamiz.
+      </p>
+      
+      <p class="invitation-subtext dyn-invitation-subtext">
+        Sizning tashrifingiz va samimiy duolaringiz ushbu quvonchli kunga yanada fayz va ko'rk bag'ishlaydi.
+      </p>
+
+      <div class="invitation-signature dyn-invitation-signature">
+        Hurmat bilan: Aliyevlar va Karimova oilalari
+      </div>
+    </section>
+
+    <!-- 5. KELIN VA KUYOV BILAN TANISHUV -->
+    <section class="section-card">
+      <div class="section-subtitle">Baxt qasri sohiblari</div>
+      <h2 class="section-title">Kelin va Kuyov</h2>
+      
+      <div class="divider-gold">
+        <span class="divider-icon">❦</span>
+      </div>
+
+      <div style="border-radius: var(--radius-md); overflow: hidden; margin: 10px auto 25px; max-width: 420px; border: 1px solid var(--border-gold);">
+        <img src="assets/images/groom-bride.jpg" alt="Kelin va Kuyov" style="width: 100%; height: 260px; object-fit: cover; display: block;" onerror="this.style.display='none'">
+      </div>
+
+      <div class="couple-grid">
+        <!-- Kuyov -->
+        <div class="couple-person">
+          <div class="couple-role">Kuyov</div>
+          <div class="couple-name dyn-groom-name">Sardor</div>
+          <div class="couple-parents dyn-groom-parents">Alisher va Dilnoza o'g'li</div>
+        </div>
+
+        <!-- Kelin -->
+        <div class="couple-person">
+          <div class="couple-role">Kelin</div>
+          <div class="couple-name dyn-bride-name">Mohinur</div>
+          <div class="couple-parents dyn-bride-parents">Jamshid va Nilufar qizi</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. TO'Y DASTURI (TIMELINE) -->
+    <section class="section-card">
+      <div class="section-subtitle">Tantanali kun</div>
+      <h2 class="section-title">To'y Dasturi</h2>
+      
+      <div class="divider-gold">
+        <span class="divider-icon">❦</span>
+      </div>
+
+      <div class="timeline-container" id="timeline-list-container">
+        <!-- Dinamik ravishda app.js orqali to'ldiriladi -->
+      </div>
+    </section>
+
+    <!-- 7. MANZIL VA LOKATSIYA -->
+    <section class="section-card">
+      <div class="section-subtitle">Tantanali manzil</div>
+      <h2 class="section-title dyn-venue-name">'Versal' Tantanalar Saroyi</h2>
+      
+      <div class="divider-gold">
+        <span class="divider-icon">❦</span>
+      </div>
+
+      <div class="venue-hall dyn-venue-hall">Zarafshon zali</div>
+      <p class="venue-address dyn-venue-address">Toshkent shahri, Yunusobod tumani, Amir Temur shoh ko'chasi, 120-uy</p>
+      <p class="venue-landmark dyn-venue-landmark">Mo'ljal: 'Shahriston' metro bekati ro'parasida</p>
+
+      <!-- Interaktiv Leaflet Xaritasi -->
+      <div class="map-embed-wrapper">
+        <div id="venue-map"></div>
+      </div>
+
+      <!-- Tezkor Navigatsiya tugmalari -->
+      <div class="venue-nav-buttons">
+        <a href="#" target="_blank" class="btn-nav btn-yandex dyn-yandex-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+          </svg>
+          <span>Yandex Go orqali borish</span>
+        </a>
+
+        <a href="#" target="_blank" class="btn-nav btn-google dyn-google-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+          </svg>
+          <span>Google Xarita</span>
+        </a>
+
+        <a href="#" target="_blank" class="btn-nav btn-2gis dyn-2gis-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span>2GIS</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 8. DRESS-CODE (KIYIM USLUBI) -->
+    <section class="section-card">
+      <div class="section-subtitle">Tavsiya etilgan liboslar</div>
+      <h2 class="section-title">Dress-Code</h2>
+      
+      <div class="divider-gold">
+        <span class="divider-icon">❦</span>
+      </div>
+
+      <p style="font-size: 0.92rem; color: var(--text-secondary); max-width: 480px; margin: 0 auto;">
+        To'yimiz yanada nafis va chiroyli suratlar bilan esda qolishi uchun quyidagi ranglardagi liboslarni kiyishni taklif etamiz:
+      </p>
+
+      <div class="dress-code-colors" id="dress-code-colors-container">
+        <!-- Dinamik generatsiya qilinadi -->
+      </div>
+
+      <p class="dress-code-note">
+        * Eslatma: Ushbu ranglar qat'iy talab emas, faqat samimiy istagimizdir!
+      </p>
+    </section>
+
+    <!-- 9. KALENDARGA QO'SHISH VA ULASHISH -->
+    <section class="section-card">
+      <div class="section-subtitle">Esdan chiqarmaslik uchun</div>
+      <h2 class="section-title">Taqvim va Ulashish</h2>
+      
+      <div class="divider-gold">
+        <span class="divider-icon">❦</span>
+      </div>
+
+      <div class="actions-grid">
+        <button id="btn-add-google-calendar" class="btn-action-card">
+          <span class="btn-action-icon">📅</span>
+          <span class="btn-action-label">Google Calendar ga qo'shish</span>
+        </button>
+
+        <button id="btn-download-ics" class="btn-action-card">
+          <span class="btn-action-icon">📥</span>
+          <span class="btn-action-label">Apple / iCal (.ics) yuklash</span>
+        </button>
+
+        <button id="btn-share-telegram" class="btn-action-card">
+          <span class="btn-action-icon">✈️</span>
+          <span class="btn-action-label">Telegram orqali ulashish</span>
+        </button>
+
+        <button id="btn-copy-link" class="btn-action-card">
+          <span class="btn-action-icon">📋</span>
+          <span class="btn-action-label">Taklifnoma havolasini nusxalash</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-monogram dyn-monogram">S & M</div>
+      <p style="margin-bottom: 8px;">Tashrifingiz uchun minnatdormiz!</p>
+      <p style="font-size: 0.78rem; opacity: 0.7;">© 2026 Sardor & Mohinur. Baxtli oila poydevori.</p>
+    </footer>
+
+  </main>
+
+  <!-- Skriptlar -->
+  <script src="js/config.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/petals.js"></script>
+  <script src="js/countdown.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
